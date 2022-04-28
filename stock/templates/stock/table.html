@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <form method="get">{% csrf_token %}
+        <label for="selected_Godown">Choose a Godown:</label>
+        <!-- <p>{{search}}</p> -->
+        <select name="selected_Godown">
+            {% for i in key2 %}
+            <option value="{{i.Godown}}">{{i.Godown}}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <input type="submit" name="Godown" />
+    </form>
+
+    <br><br>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Plant</th>
+                <th scope="col">Godown</th>
+                <th scope="col">Our_Lot</th>
+                <th scope="col">Recd_Date</th>
+                <th scope="col">Types</th>
+                <th scope="col">Garden</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Inv_No</th>
+                <th scope="col">Cases</th>
+                <th scope="col">Kg</th>
+                <th scope="col">Net_Kg</th>
+                <th scope="col">Row_No</th>
+                <th scope="col">Remarks</th>
+                <th scope="col">Status</th>
+                <th scope="col">PCases</th>
+            </tr>
+        </thead>
+        {% if key1 %}
+        <tbody>
+            {% for i in key1 %}
+            <tr>
+                <th scope="row">{{i.id}}</th>
+                <td>{{i.Plant}}</td>
+                <td>{{i.Godown}}</td>
+                <td>{{i.OurLot}}</td>
+                <td>{{i.RecdDate}}</td>
+                <td>{{i.Type}}</td>
+                <td>{{i.Garden}}</td>
+                <td>{{i.Grade}}</td>
+                <td>{{i.InvNo}}</td>
+                <td>{{i.Cases}}</td>
+                <td>{{i.Kg}}</td>
+                <td>{{i.NetKg}}</td>
+                <td>{{i.RowNo}}</td>
+                <td>{{i.Remarks}}</td>
+                <!-- {% if i.status == False %}
+                <td style="background-color:#FF0000">{{i.status}}</td>
+                {% else %} -->
+                <td>{{i.Status}}</td>
+                <!-- {% endif %} -->
+                {% if i.Pcase != i.Cases and i.Pcase > 0 %}
+                <td style="background-color:#FF0000">{{i.Pcase}}</td>
+                {% else %}
+                <td>{{i.Pcase}}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+        {% endif %}
+    </table>
+    </div>
+</body>
+
+</html>

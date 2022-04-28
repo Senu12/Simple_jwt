@@ -11,4 +11,4 @@ class StocktickSerializer(serializers.ModelSerializer):
 class UpdateStocktickSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stocktick
-        fields = ['status']
+        fields = ['Pcase']

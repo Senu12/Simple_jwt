@@ -5,12 +5,13 @@ from rest_framework.views import APIView
 from rest_framework.mixins import UpdateModelMixin, ListModelMixin
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-
+from rest_framework.renderers import TemplateHTMLRenderer
+import requests
 # Create your views here.
 
 
 class StockticklistView(ListModelMixin, GenericAPIView):
-    queryset = Stocktick.objects.all()
+    queryset = Stocktick.objects.filter()
     serializer_class = StocktickSerializer
 
     def get(self, request, *args, **kwargs):
@@ -23,15 +24,3 @@ class StocktickView(UpdateModelMixin, GenericAPIView):
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
-
-# class Stockupdate(APIView):
-#     def patch(self,request,pk,format=None):
-#         id=pk
-#         stu = Stocktick.objects.get(pk=id)
-#         serializer = StocktickSerializer(stu,data=request.data,partial = True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({
-#                 'data':serializer.data
-#             })
-#         return Response(serializer.errors)

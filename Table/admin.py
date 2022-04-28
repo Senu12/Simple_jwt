@@ -6,5 +6,5 @@ from .models import Stocktick
 
 @admin.register(Stocktick)
 class StocktickAdmin(admin.ModelAdmin):
-    list_display = ['id', 'plant', 'godown', 'our_lot', 'recd_date', 'types', 'garden',
-                    'grade', 'inv_no', 'cases', 'kg', 'net_kg', 'row_no', 'remarks', 'status']
+    list_display = ['Plant', 'Godown', 'OurLot',
+                    'InvNo', 'Cases', 'RowNo', 'Remarks', 'Status', 'Pcase']
