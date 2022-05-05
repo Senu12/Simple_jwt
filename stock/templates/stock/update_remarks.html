@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>updateRemarks</title>
+</head>
+
+<body>
+    <h1>update remarks</h1>
+    <br />
+    <!-- {{ data }} -->
+
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+        data-whatever="@mdo">Edit</button> -->
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- {{ data.remarks }} -->
+                        <!-- {% if data %}
+                        {% for i in data %} -->
+                        <!-- <p>{{i.Remarks}}</p> -->
+                        <div class="form-group">
+                            <label for="plant-name" class="col-form-label">Plant</label>
+                            <input type="text" class="form-control" id="plant-name" value="{{Stocktick.Plant}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="Godown-name" class="col-form-label">Godown</label>
+                            <input type="text" class="form-control" id="Godown-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="ourlot-name" class="col-form-label">OurLot</label>
+                            <input type="text" class="form-control" id="ourlot-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="recd-name" class="col-form-label">RecdDate</label>
+                            <input type="text" class="form-control" id="recd-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="type-name" class="col-form-label">Type</label>
+                            <input type="text" class="form-control" id="type-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="garden-name" class="col-form-label">Garden</label>
+                            <input type="text" class="form-control" id="garden-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="grade-name" class="col-form-label">Grade</label>
+                            <input type="text" class="form-control" id="grade-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="invno-name" class="col-form-label">InvNo</label>
+                            <input type="text" class="form-control" id="invno-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="cases-name" class="col-form-label">Cases</label>
+                            <input type="text" class="form-control" id="cases-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="kg-name" class="col-form-label">Kg</label>
+                            <input type="text" class="form-control" id="kg-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="netkg-name" class="col-form-label">NetKg</label>
+                            <input type="text" class="form-control" id="netkg-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="rowno-name" class="col-form-label">RowNo</label>
+                            <input type="text" class="form-control" id="rowno-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="remarks-name" class="col-form-label">Remarks</label>
+                            <input type="text" class="form-control" id="remarks-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="status-name" class="col-form-label">Status</label>
+                            <input type="text" class="form-control" id="status-name">
+                        </div>
+                        <!-- <div class="form-group">
+                            <label for="message-text" class="col-form-label">Message:</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                        </div> -->
+                        {% endfor %}
+                        {% endif %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+

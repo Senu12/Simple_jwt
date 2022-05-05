@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit</title>
+</head>
+
+<body>
+    <center>
+        <h1>Edit and update data</h1>
+        <hr>
+        <form method="POST" action="/data/edit/{{data.id}}">
+            {% csrf_token %}
+        <table border="1">
+            <!-- <tr>
+                <td>Plant</td>
+                <td>
+                    <input type="text" name="plant" value="{{data.Plant}}">
+                </td>
+            </tr>
+            <tr>
+                <td>Godown</td>
+                <td>
+                    <input type="text" name="godown" value="{{data.Godown}}">
+                </td>
+            </tr>
+            <tr>
+                <td>OurLot</td>
+                <td>
+                    <input type="text" name="ourlot" value="{{data.OurLot}}">
+                </td>
+            </tr>
+            <tr>
+                <td>RecdDate</td>
+                <td>
+                    <input type="text" name="recddate" value="{{data.RecdDate}}">
+                </td>
+            </tr>
+            <tr>
+                <td>Type</td>
+                <td>
+                    <input type="text" name="type" value="{{data.Type}}">
+                </td>
+            </tr>
+            <tr>
+                <td>Garden</td>
+                <td>
+                    <input type="text" name="garden" value="{{data.Garden}}">
+                </td>
+            </tr> -->
+            <tr>
+                <td>Remarks</td>
+                <td>
+                    <input type="text" name="garden" value="{{data.Remarks}}">
+                </td>
+            </tr>
+            <!-- <tr>
+                <td>Grade</td>
+                <td>
+                    <input type="text">
+                </td>
+            </tr>
+            <tr>
+                <td>InvNo</td>
+                <td>
+                    <input type="text">
+                </td>
+            </tr>
+            <tr>
+                <td>Cases</td>
+                <td>
+                    <input type="text">
+                </td>
+            </tr>
+            <tr>
+                <td>Kg</td>
+                <td>
+                    <input type="text">
+                </td>
+            </tr>
+            <tr>
+                <td>NetKg</td>
+                <td>
+                    <input type="text">
+                </td>
+            </tr>
+            <tr>
+                <td>RowNo</td>
+                <td>
+                    <input type="text">
+                </td>
+            </tr>
+            <tr>
+                <td>Remarks</td>
+                <td>
+                    <input type="text">
+                </td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td>
+                    <input type="text">
+                </td>
+            </tr> -->
+        </table>
+        <input type="submit" value="update">
+        {% if messages %}
+        {% for updated in messages %}
+        <h3 style="color : green;">{{updated}}</h3>
+        {% endfor %}
+        {% endif %}
+    </form>
+    </center>
+</body>
+
+</html>

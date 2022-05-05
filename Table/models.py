@@ -19,3 +19,6 @@ class Stocktick(models.Model):
     Remarks = models.TextField(max_length=500)
     Status = models.BooleanField(default=True)
     Pcase = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.OurLot)

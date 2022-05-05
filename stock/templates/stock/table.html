@@ -2,84 +2,213 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Table</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body>
-    <form method="get">{% csrf_token %}
-        <label for="selected_Godown">Choose a Godown:</label>
-        <!-- <p>{{search}}</p> -->
-        <select name="selected_Godown">
-            {% for i in key2 %}
-            <option value="{{i.Godown}}">{{i.Godown}}</option>
-            {% endfor %}
-        </select>
-        <br><br>
-        <input type="submit" name="Godown" />
-    </form>
-
+  <form method="GET">
+    <label for="selected_Godown">Choose a Godown:</label>
+    <select id="selected_Godown" name="selected_Godown">
+      {% for i in key2 %}
+      <option value="{{i.Godown}}">{{i.Godown}}</option>
+      {% endfor %}
+    </select>
     <br><br>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Plant</th>
-                <th scope="col">Godown</th>
-                <th scope="col">Our_Lot</th>
-                <th scope="col">Recd_Date</th>
-                <th scope="col">Types</th>
-                <th scope="col">Garden</th>
-                <th scope="col">Grade</th>
-                <th scope="col">Inv_No</th>
-                <th scope="col">Cases</th>
-                <th scope="col">Kg</th>
-                <th scope="col">Net_Kg</th>
-                <th scope="col">Row_No</th>
-                <th scope="col">Remarks</th>
-                <th scope="col">Status</th>
-                <th scope="col">PCases</th>
-            </tr>
-        </thead>
-        {% if key1 %}
-        <tbody>
-            {% for i in key1 %}
-            <tr>
-                <th scope="row">{{i.id}}</th>
-                <td>{{i.Plant}}</td>
-                <td>{{i.Godown}}</td>
-                <td>{{i.OurLot}}</td>
-                <td>{{i.RecdDate}}</td>
-                <td>{{i.Type}}</td>
-                <td>{{i.Garden}}</td>
-                <td>{{i.Grade}}</td>
-                <td>{{i.InvNo}}</td>
-                <td>{{i.Cases}}</td>
-                <td>{{i.Kg}}</td>
-                <td>{{i.NetKg}}</td>
-                <td>{{i.RowNo}}</td>
-                <td>{{i.Remarks}}</td>
-                <!-- {% if i.status == False %}
+    <button type="submit">Show Godown</button>
+    <center>
+      <H2 style="border: 2px solid DodgerBlue;">GODOWN {{selected}}</H2>
+    </center>
+  </form>
+
+
+  <script>
+    $(document).ready(function () {
+      $('#selected_Godown').val('{{selected}}')
+    });
+  </script>
+
+  <br><br>
+  <table id="records_table" class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Plant</th>
+        <th scope="col">Godown</th>
+        <th scope="col">Our_Lot</th>
+        <th scope="col">Recd_Date</th>
+        <th scope="col">Types</th>
+        <th scope="col">Garden</th>
+        <th scope="col">Grade</th>
+        <th scope="col">Inv_No</th>
+        <th scope="col">Cases</th>
+        <th scope="col">Kg</th>
+        <th scope="col">Net_Kg</th>
+        <th scope="col">Row_No</th>
+        <th scope="col">Remarks</th>
+        <th scope="col">Status</th>
+        <th scope="col">PCases</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    {% if key1 %}
+    <tbody>
+      {% for i in key1 %}
+      <tr>
+        <th scope="row">{{i.id}}</th>
+        <td>{{i.Plant}}</td>
+        <td>{{i.Godown}}</td>
+        <td>{{i.OurLot}}</td>
+        <td>{{i.RecdDate}}</td>
+        <td>{{i.Type}}</td>
+        <td>{{i.Garden}}</td>
+        <td>{{i.Grade}}</td>
+        <td>{{i.InvNo}}</td>
+        <td>{{i.Cases}}</td>
+        <td>{{i.Kg}}</td>
+        <td>{{i.NetKg}}</td>
+        <td>{{i.RowNo}}</td>
+        <td>{{i.Remarks}}</td>
+        <!-- {% if i.status == False %}
                 <td style="background-color:#FF0000">{{i.status}}</td>
                 {% else %} -->
-                <td>{{i.Status}}</td>
-                <!-- {% endif %} -->
-                {% if i.Pcase != i.Cases and i.Pcase > 0 %}
-                <td style="background-color:#FF0000">{{i.Pcase}}</td>
-                {% else %}
-                <td>{{i.Pcase}}</td>
-                {% endif %}
-            </tr>
-            {% endfor %}
-        </tbody>
+        <td>{{i.Status}}</td>
+        <!-- {% endif %} -->
+        {% if i.Pcase != i.Cases and i.Pcase > 0 %}
+        <td style="background-color:#FF0000">{{i.Pcase}}</td>
+        {% else %}
+        <td>{{i.Pcase}}</td>
         {% endif %}
-    </table>
+        <td>
+          <button class='btn btn-primary update' id={{i.id}} data-toggle='modal'
+            data-target='#updateModal'>Update</button>
+        </td>
+
+      </tr>
+      {% endfor %}
+      <tr style="background-color:#a8a5a5">
+        <td colspan="9">Total Godown Cases</td>
+        <td>{{sum}}</td>
+        <td colspan="5">Total Scanned Bags</td>
+        <td>{{case}}</td>
+      </tr>
+    </tbody>
+    {% endif %}
+  </table>
+
+  <!-- popup -->
+  <div class="container" style="margin-left:inherit">
+
+    <!--  Update Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <input type="hidden" id="Myid" value="">
+              <div class="form-group">
+                <label for="Remarks">Remarks</label>
+                <input type="text" class="form-control" id="Remarks" name="Remarks" value="">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="supdate">Update</button>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <script>
+      // CSRF code
+      function getCookie(name) {
+        var cookieValue = null;
+        var i = 0;
+        if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (i; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+      var csrftoken = getCookie('csrftoken');
+
+      function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+
+      // Use csrf token while doing post request, this will prevent 500 Server Error
+      $.ajaxSetup({
+        crossDomain: false, // obviates need for sameOrigin test
+        beforeSend: function (xhr, settings) {
+          if (!csrfSafeMethod(settings.type)) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+        }
+      });
+
+      //For getting data to the modal
+      $('#records_table').on('click', '.update', function () {
+        var id = $(this).attr('id');
+        $('input[id=Myid]').val(id);
+
+        var myurl = 'http://localhost:8000/data/api/' + id;
+        $("#Remarks").change(function () {
+          $('input[name=Remarks]').val($(this).val());
+
+        });
+
+        $.ajax({
+          async: true,
+          url: myurl,
+          method: 'GET',
+          success: function (result) {
+            $('input[name="Remarks"]').val(result.Remarks);
+          }
+        });
+
+      });
+
+      //For Update the data
+      $('#supdate').click(function () {
+        var id = $("#Myid").attr("value");
+        console.log(id);
+        var myurl = 'http://localhost:8000/data/api/' + id + '/update/';
+
+        $.ajax({
+          type: 'PATCH',
+          url: myurl,
+          data: {
+            'Remarks': $('input[name=Remarks]').val(),
+          },
+          success: function (response) {
+            location.reload();
+          },
+        })
+      });
+
+    </script>
 </body>
 
 </html>

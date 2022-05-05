@@ -1,0 +1,52 @@
+ from Table.models import Stocktick
+>>> Stocktick.objects.all()
+<QuerySet [<Stocktick: Stocktick object (1)>, <Stocktick: Stocktick object (2)>, <Stocktick: Stocktick object (3)>]>
+>>> data = Stocktick.objects.all()
+>>> data
+<QuerySet [<Stocktick: Stocktick object (1)>, <Stocktick: Stocktick object (2)>, <Stocktick: Stocktick object (3)>]>
+>>> data[0]
+<Stocktick: Stocktick object (1)>
+>>> data[0].OutLot
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'Stocktick' object has no attribute 'OutLot'
+>>> data[0].id
+1
+>>> data[0].Plant
+'N'
+>>> data[0].OurLot
+2114326
+>>> Stocktick.objects.filter(OurLot__exact=2114326)
+<QuerySet [<Stocktick: Stocktick object (1)>, <Stocktick: Stocktick object (3)>]>
+>>> match = Stocktick.objects.filter(OurLot).values('OurLot')
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+NameError: name 'OurLot' is not defined
+>>> match = Stocktick.objects.values('OurLot')
+>>> match
+<QuerySet [{'OurLot': 2114326}, {'OurLot': 2115277}, {'OurLot': 2114326}]>
+>>> Stocktick.objects.values('OurLot')
+<QuerySet [{'OurLot': 2114326}, {'OurLot': 2115277}, {'OurLot': 2114326}]>
+match = Stocktick.objects.values('OurLot')
+>>> match
+<QuerySet [{'OurLot': 2114326}, {'OurLot': 2115277}, {'OurLot': 2114326}]>
+>>> Stocktick.objects.values('OurLot')
+<QuerySet [{'OurLot': 2114326}, {'OurLot': 2115277}, {'OurLot': 2114326}]>
+>>> match[0]
+{'OurLot': 2114326}
+>>> match[0]['OurLot']
+2114326
+>>> match = Stocktick.objects.filter(OurLot__exact=match[0]['OurLot'])
+>>> match
+<QuerySet [<Stocktick: Stocktick object (1)>, <Stocktick: Stocktick object (3)>]>
+>>> match
+<QuerySet [<Stocktick: Stocktick object (1)>, <Stocktick: Stocktick object (3)>]>
+>>> match
+<QuerySet [<Stocktick: Stocktick object (1)>, <Stocktick: Stocktick object (3)>]>
+>>> Stocktick.objects.count()
+3
+>>> match
+<QuerySet [<Stocktick: Stocktick object (1)>, <Stocktick: Stocktick object (3)>]>
+>>> vars( match[0])
+{'_state': <django.db.models.base.ModelState object at 0x0000019402281FF0>, 'id': 1, 'Plant': 'N', 'Godown': '1', 'OurLot': 2114326, 'RecdDate': datetime.date(2022, 4, 27), 
+'Type': 'L', 'Garden': 'SABASPORE', 'Grade': 'BOPSM', 'InvNo': 'C365', 'Cases': 20, 'Kg': 36.0, 'NetKg': 696.0, 'RowNo': 'A1', 'Remarks': 'TEX', 'Status': False, 'Pcase': 15}
