@@ -21,7 +21,7 @@
       {% endfor %}
     </select>
     <br><br>
-    <button type="submit">Show Godown</button>
+    <button type="submit" class="btn btn-outline-success">Show Godown</button>
     <center>
       <H2 style="border: 2px solid DodgerBlue;">GODOWN {{selected}}</H2>
     </center>
@@ -34,10 +34,12 @@
     });
   </script>
 
+
   <br><br>
+  
   <table id="records_table" class="table table-bordered">
     <thead>
-      <tr>
+      <tr class="table-primary">
         <th scope="col">ID</th>
         <th scope="col">Plant</th>
         <th scope="col">Godown</th>
@@ -54,7 +56,11 @@
         <th scope="col">Remarks</th>
         <th scope="col">Status</th>
         <th scope="col">PCases</th>
+        {% if isHigher %}
         <th scope="col">Actions</th>
+        <th scope="col">Updated_By</th>
+        <th scope="col">Updated_At</th>
+        {% endif %}
       </tr>
     </thead>
     {% if key1 %}
@@ -85,11 +91,14 @@
         {% else %}
         <td>{{i.Pcase}}</td>
         {% endif %}
+        {% if isHigher %}
         <td>
           <button class='btn btn-primary update' id={{i.id}} data-toggle='modal'
             data-target='#updateModal'>Update</button>
         </td>
-
+        <td>{{i.updated_by_id}}</td>
+        <td>{{i.updated_at}}</td>
+        {% endif %}
       </tr>
       {% endfor %}
       <tr style="background-color:#a8a5a5">
@@ -101,7 +110,6 @@
     </tbody>
     {% endif %}
   </table>
-
   <!-- popup -->
   <div class="container" style="margin-left:inherit">
 
@@ -118,6 +126,7 @@
           </div>
           <div class="modal-body">
             <form>
+              <input type="hidden" id="userid" value="{{current_user}}">
               <input type="hidden" id="Myid" value="">
               <div class="form-group">
                 <label for="Remarks">Remarks</label>
@@ -195,15 +204,21 @@
         var id = $("#Myid").attr("value");
         console.log(id);
         var myurl = 'http://localhost:8000/data/api/' + id + '/update/';
+        var updated_by_id = $("#userid").attr("value");
+        console.log(updated_by_id);
+
+        var remark = $('input[name=Remarks]').val();
 
         $.ajax({
           type: 'PATCH',
           url: myurl,
           data: {
-            'Remarks': $('input[name=Remarks]').val(),
+            'Remarks': remark,
+            'updated_by' : updated_by_id
           },
           success: function (response) {
             location.reload();
+            $('input[name=Remarks]').val("");
           },
         })
       });

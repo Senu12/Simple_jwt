@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'Table',
     'stock',
     'django_filters',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -137,6 +138,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #         'rest_framework.renderers.JSONRenderer',
 #     ]
 # }
+
+LOGIN_REDIRECT_URL = '/data/Listofdata'
+# LOGIN_REDIRECT_URL = '/data/higher'
 
 
 CORS_ALLOWED_ORIGINS = [

@@ -1,0 +1,5 @@
+rwatea templates = higher templates
+stockisfactory dont show update button
+stockisho show update nbutton 
+updated_by
+updated_on

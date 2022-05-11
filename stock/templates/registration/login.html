@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>SignIn Form</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- Custom Theme files -->
+<link href="{% static '/style.css' %}" rel="stylesheet" type="text/css" media="all" />
+<!-- //Custom Theme files -->
+<!-- web font -->
+<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+<!-- //web font -->
+</head>
+<body>
+	<!-- main -->
+	<div class="main-w3layouts wrapper">
+		<h1>SignIn Form</h1>
+        {% comment %} <center><h3 style="color:red">{{msg}}</h3></center> {% endcomment %}
+		<div class="main-agileinfo">
+			<div class="agileits-top">
+				{% comment %} <form action="{% url 'login' %}" method="post"> {% endcomment %}
+					<form action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+					<input class="text" type="text" name="username" placeholder="Please Enter Your Username" required="">
+					<input class="text" type="password" name="password" placeholder="Password" required="">
+					{{form.errors}}
+					<input type="submit" value="SignIn">
+				</form>
+				{% comment %} <p>Don't have an Account? <a href="#"> Register Now!</a></p> {% endcomment %}
+			</div>
+		</div>
+		<!-- copyright -->
+		<!-- //copyright -->
+		<ul class="colorlib-bubbles">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<!-- //main -->
+</body>
+</html>

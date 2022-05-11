@@ -3,9 +3,11 @@ from .models import Stocktick
 
 
 class StocktickSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Stocktick
         fields = '__all__'
+        
 
     # def update(self, instance, validated_data):
     #     print("===============",instance)
