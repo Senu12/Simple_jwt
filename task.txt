@@ -3,3 +3,122 @@ stockisfactory dont show update button
 stockisho show update nbutton 
 updated_by
 updated_on
+
+
+SELECT count(orders.orderId) as counts,customers.customerId,customers.country
+FROM orders
+INNER JOIN  Customers
+ON Orders.CustomerID=Customers.CustomerID GROUP BY Orders.customerId;
+
+all_data = TeaBag.objects.values('OurLot__id', 'OurLot__Plant', 'OurLot__Godown', 'OurLot__OurLot', 'OurLot__RecdDate', 'OurLot__Type', 'OurLot__Garden', 'OurLot__Grade', 'OurLot__InvNo', 'OurLot__Cases', 'OurLot__Kg', 'OurLot__NetKg', 'OurLot__RowNo', 'OurLot__Remarks', 'OurLot__Status', 'OurLot__Pcase', 'OurLot__updated_by_id', 'OurLot__updated_at').order_by('OurLot').annotate(count=Count('PacketId'))
+
+# filtering data from database and loop using 
+all_data = TeaBag.objects.filter(OurLot__Godown=gData[0]['Godown']).values('OurLot__id', 'OurLot__Plant', 'OurLot__Godown', 'OurLot__OurLot', 'OurLot__RecdDate', 'OurLot__Type', 'OurLot__Garden', 'OurLot__Grade', 'OurLot__InvNo', 'OurLot__Cases', 'OurLot__Kg', 'OurLot__NetKg', 'OurLot__RowNo', 'OurLot__Remarks', 'OurLot__Status', 'OurLot__Pcase', 'OurLot__updated_by_id', 'OurLot__updated_at').order_by('OurLot').annotate(count=Count('PacketId'))
+
+
+# fetching value from temporary not from database.
+<tbody>
+      {% for i in key1 %}
+      <tr>
+        <th scope="row">{{i.OurLot__id}}</th>
+        <td>{{i.OurLot__Plant}}</td>
+        <td>{{i.OurLot__Godown}}</td>
+        <td>{{i.OurLot__OurLot}}</td>
+        <td>{{i.count}}</td>
+        <td>{{i.OurLot__RecdDate}}</td>
+        <td>{{i.OurLot__Type}}</td>
+        <td>{{i.OurLot__Garden}}</td>
+        <td>{{i.OurLot__Grade}}</td>
+        <td>{{i.OurLot__InvNo}}</td>
+        <td>{{i.OurLot__Cases}}</td>
+        <td>{{i.OurLot__Kg}}</td>
+        <td>{{i.OurLot__NetKg}}</td>
+        <td>{{i.OurLot__RowNo}}</td>
+        <td>{{i.OurLot__Remarks}}</td>
+        <!-- {% if i.status == False %}
+                <td style="background-color:#FF0000">{{i.status}}</td>
+                {% else %} -->
+        <td>{{i.OurLot__Status}}</td>
+        <!-- {% endif %} -->
+        {% if i.OurLot__Pcase != i.OurLot__Cases and i.OurLot__Pcase > 0 %}
+        <td style="background-color:#FF0000">{{i.OurLot__Pcase}}</td>
+        {% else %}
+        <td>{{i.OurLot__Pcase}}</td>
+        {% endif %}
+        {% if isHigher %}
+        <td>
+          <button class='btn btn-primary update' id={{i.OurLot__id}} data-toggle='modal'
+            data-target='#updateModal'>Update</button>
+        </td>
+        <td>{{i.OurLot__updated_by_id}}</td>
+        <td>{{i.OurLot__updated_at}}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+      <tr style="background-color:#a8a5a5">
+        <td colspan="10">Total Godown Cases</td>
+        <td>{{sum}}</td>
+        <td colspan="5">Total Scanned Bags</td>
+        <td>{{case}}</td>
+      </tr>
+    </tbody>
+    {% endif %}
+  </table>
+  <a class="btn btn-primary" href="{% url 'logout' %}" role="button">LogOut</a>
+
+# from database fetching value 
+  <tbody>
+      {% for i in key1 %}
+      <tr>
+        <th scope="row">{{i.id}}</th>
+        <td>{{i.Plant}}</td>
+        <td>{{i.Godown}}</td>
+        <td>{{i.OurLot}}</td>
+        {% comment %} <td>{{i.count}}</td> {% endcomment %}
+        <td>{{i.RecdDate}}</td>
+        <td>{{i.Type}}</td>
+        <td>{{i.Garden}}</td>
+        <td>{{i.Grade}}</td>
+        <td>{{i.InvNo}}</td>
+        <td>{{i.Cases}}</td>
+        <td>{{i.Kg}}</td>
+        <td>{{i.NetKg}}</td>
+        <td>{{i.RowNo}}</td>
+        <td>{{i.Remarks}}</td>
+        <!-- {% if i.status == False %}
+                <td style="background-color:#FF0000">{{i.status}}</td>
+                {% else %} -->
+        <td>{{i.Status}}</td>
+        <!-- {% endif %} -->
+        {% if i.Pcase != i.Cases and i.Pcase > 0 %}
+        <td style="background-color:#FF0000">{{i.Pcase}}</td>
+        {% else %}
+        <td>{{i.Pcase}}</td>
+        {% endif %}
+        {% if isHigher %}
+        <td>
+          <button class='btn btn-primary update' id={{i.id}} data-toggle='modal'
+            data-target='#updateModal'>Update</button>
+        </td>
+        <td>{{i.updated_by_id}}</td>
+        <td>{{i.updated_at}}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+      <tr style="background-color:#a8a5a5">
+        <td colspan="9">Total Godown Cases</td>
+        <td>{{sum}}</td>
+        <td colspan="5">Total Scanned Bags</td>
+        <td>{{case}}</td>
+      </tr>
+    </tbody>
+    {% endif %}
+  </table>
+  <a class="btn btn-primary" href="{% url 'logout' %}" role="button">LogOut</a>
+
+# for nested serializer count the item and we can do sum also
+# for count
+            # for lot in Stocktick.objects.values('OurLot').distinct():
+            #     # print(lot)
+            #     key = TeaBag.objects.filter(OurLot__OurLot=lot['OurLot']).values('id','OurLot__OurLot','PacketId').count()
+            #     print(key)

@@ -1,23 +1,45 @@
 from rest_framework import serializers
-from .models import Stocktick
+from .models import Stocktick, TeaBag
+
+# For Nested serializer
+class TeaBagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TeaBag
+        fields = ['PacketId']
+        
+
+class NewSerializer(serializers.ModelSerializer):
+
+    Ourlot = TeaBagSerializer(many=True)
+
+    class Meta:
+        model = Stocktick
+        fields = (
+            'OurLot',
+            'Ourlot'
+        )
 
 
+# To get data by id
 class StocktickSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Stocktick
         fields = '__all__'
-        
-
-    # def update(self, instance, validated_data):
-    #     print("===============",instance)
-    #     instance.Remarks = validated_data.get('Remarks', instance.Remarks)
-    #     # instance.content = validated_data.get('content', instance.content)
-    #     # instance.created = validated_data.get('created', instance.created)
-    #     return instance
 
 
+# for update data
 class UpdateStocktickSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stocktick
         fields = ['Pcase']
+
+
+# for updated_by_id
+class RemarkstocktickSerializer(serializers.ModelSerializer):
+    # updated_by = serializers.ReadOnlyField(source='updated_by.username')
+
+    class Meta:
+        model = Stocktick
+        fields = ['Remarks', 'updated_by']

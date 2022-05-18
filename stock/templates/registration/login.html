@@ -25,7 +25,9 @@
                     {% csrf_token %}
 					<input class="text" type="text" name="username" placeholder="Please Enter Your Username" required="">
 					<input class="text" type="password" name="password" placeholder="Password" required="">
-					{{form.errors}}
+					{% if form.errors %}
+					<p>Your username and password didn't match. Please try again.</p>
+					{% endif %}
 					<input type="submit" value="SignIn">
 				</form>
 				{% comment %} <p>Don't have an Account? <a href="#"> Register Now!</a></p> {% endcomment %}

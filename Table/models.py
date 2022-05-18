@@ -22,8 +22,16 @@ class Stocktick(models.Model):
     Status = models.BooleanField(default=True)
     Pcase = models.IntegerField(default=0)
     updated_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True)
+        User, on_delete=models.CASCADE,related_name='updatedBy', null=True) 
     updated_at = models.DateTimeField(auto_now=True, editable=False)
+
+    def __str__(self):
+        return str(self.OurLot)
+
+
+class TeaBag(models.Model):
+    OurLot = models.ForeignKey(Stocktick, on_delete=models.CASCADE, related_name='Ourlot')
+    PacketId = models.IntegerField(unique=True)
 
     def __str__(self):
         return str(self.OurLot)

@@ -1,0 +1,215 @@
+from http.client import HTTPResponse
+from msilib.schema import ListView
+from multiprocessing import context
+from pickle import TRUE
+from re import template
+from rest_framework import viewsets
+from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.urls import reverse
+from rest_framework.mixins import CreateModelMixin,UpdateModelMixin,ListModelMixin
+from django.db.models import Count
+from django.db.models import Avg, Count, Min, Sum
+from django.contrib.auth import authenticate
+from . serializers import UserSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication
+from rest_framework import permissions
+from . permissions import IsOwner
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.http import HttpResponse
+from django.core.exceptions import PermissionDenied
+from rest_framework.viewsets import GenericViewSet
+from django.contrib.auth.decorators import login_required
+
+
+# views for show data
+
+
+def ShowPage(request, pk):
+    all_data = Stocktick.objects.filter(Godown=pk)
+    gData = Stocktick.objects.values('Godown').distinct()
+    # print(all_data)
+
+    if request.method == "GET":
+        Godown_filter = request.GET.get('selected_Godown')
+        all_data = Stocktick.objects.filter(Godown=Godown_filter)
+        # print(Godown_filter)
+        return render(request, 'stock/table.html', {'key1': all_data, 'key2': gData, 'search': Godown_filter})
+
+# for update data
+
+
+def updatedata(request):
+    status = Stocktick.objects.filter(Status=True).update(Status=False)
+    # return render(request, 'stock/table.html', {'key1':status})
+    return redirect(reverse('showpage', args=(1,)))
+
+
+# Registeruserview
+
+
+class UserRegister(generics.GenericAPIView):
+    serializer_class = UserSerializer
+
+    def post(self, request, *args,  **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "message": "User Created Successfully.  Now perform Login to get your token",
+        })
+
+
+# login view
+
+
+class LoginView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request, *args, **kwargs):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        if username is None or password is None:
+            return Response({'error': 'Please provide both username and password'})
+        user = authenticate(username=username, password=password)
+        if not user:
+            return Response({'error': 'Invalid Credentials'})
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
+
+
+# values match views and for duplicate row in table
+# class DuplicateRow(APIView):
+#     sum_cases = 0
+#     for row in Stocktick.objects.values('OurLot').distinct():
+#         # print(row)
+#         matched_value = Stocktick.objects.filter(OurLot__exact=row['OurLot'])[
+#             1:].values_list('id', flat=True)
+#         # print(matched_value)
+#         total_cases = Stocktick.objects.filter(OurLot__exact=row['OurLot'])[
+#             1:].aggregate(Sum('Cases'))
+#         # print(total_cases)
+#         sum_cases = total_cases['Cases__sum']
+#         Stocktick.objects.filter(OurLot__exact=row['OurLot']).update(Cases=sum_cases)
+#         # Stocktick.objects.filter(pk__in=list(matched_value)).delete()
+
+#         # Stocktick.objects.filter(OurLot__exact=row['OurLot']).update(Cases=sum_cases)
+#         # print(case)
+
+#         # print(sum_cases)
+#         # Stocktick.objects.filter(OurLot__exact=row['OurLot']).update(Cases=sum_cases)
+#         # Stocktick.objects.filter(pk__in=list(matched_value)).update(Cases=sum_cases)
+
+#         total_sum = Stocktick.objects.filter(OurLot__exact=row['OurLot']).aggregate(Sum('Cases'))
+    # print(total_sum)
+
+
+# logout token
+class Logout(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+    def get(self, request, format=None):
+        # simply delete the token to force a login
+        request.user.auth_token.delete()
+        return Response({'msg': 'LogOut'}, status=status.HTTP_200_OK)
+
+# for update serializer
+# def update(self, instance, validated_data):
+    #     print("===============",instance)
+    #     instance.Remarks = validated_data.get('Remarks', instance.Remarks)
+    #     # instance.content = validated_data.get('content', instance.content)
+    #     # instance.created = validated_data.get('created', instance.created)
+    #     return instance
+
+    
+# def logout(request):
+#     if request.method == 'POST':
+#         logout(request.user.session_set.all().delete())
+#         return redirect('login')
+
+# urls 
+# path("cases/", views.StockUpdate.as_view(), name='cases'),
+    # path('duplicate/',views.duplicatevalue),
+    # path('signup/', views.UserRegister.as_view()),#
+    # path('signin/', views.LoginView.as_view()),
+    # path('logout/',views.Logout.as_view()),
+# path("login/",views.Loginpage),
+    # path('login/', LoginView.as_view(), name='login'),
+    # path('higher/',views.higher),
+    # path('lower/',views.lower),
+    # path('remarks/<int:pk>',views.RemarksView.as_view()),
+    # path('logout/', views.logout,name='logout'),
+# path("showpage/<int:pk>",views.ShowPage,name='showpage'),
+    # path("status/",views.updatedata,name='status'),
+
+
+# just for check
+# from django.template import loader
+# from django.views.decorators.cache import cache_control
+# @cache_control(no_cache=True, no_store=True, must_revalidate=True)
+# def loggedIn(request):
+#     if request.user.is_authenticated:
+#         username = request.user.username
+#         template = loader.get_template('stock/table.html')
+#         context = {
+#             'username':username
+#         }
+#         return HTTPResponse(template.render(context,request))
+#     else:
+#         return redirect('login')
+    
+# def logout(request):
+#     logout(request)
+#     return redirect('login')
+
+
+# register serializers
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+
+    def create(self, validated_data):
+        user = User.objects.create(username=validated_data['username'])
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
+
+
+# value serializer
+
+class ValueSerializer(serializers.ModelSerializer):
+    Status = serializers.SerializerMethodField()
+
+    def get_Status(self, obj):
+        if obj.Status == True:
+            return False
+
+    class Meta:
+        model = Stocktick
+        fields = '__all__'
+
+# for CRUD operation
+class TeaBagView(ModelViewSet):
+    queryset = TeaBag.objects.all()
+    serializer_class = TeaBagSerializer
+
+# urls.py
+from rest_framework import routers
+
+router = routers.SimpleRouter()
+router.register('Teabag', views.TeaBagView,basename='Tea')
+path('', include(router.urls)),
+
+ # # to delete ourlot duplicate value keep one first.
+        # for ourlot in Stocktick.objects.values('OurLot').distinct():
+        #     # print(ourlot)
+        #     matched_ourlot = Stocktick.objects.filter(OurLot__exact=ourlot['OurLot'])[1:].values_list('id', flat=True)
+        #     # print(matched_ourlot)
+        #     Stocktick.objects.filter(pk__in=list(matched_ourlot)).delete()

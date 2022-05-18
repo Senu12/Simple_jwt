@@ -13,30 +13,37 @@
 </head>
 
 <body>
-  <form method="GET">
+  <!-- for Godown -->
+  <form method="GET" name="form1" id="form1">
     <label for="selected_Godown">Choose a Godown:</label>
-    <select id="selected_Godown" name="selected_Godown">
+    <select id="selected_Godown" name="selected_Godown" onchange='this.form.submit()'>
       {% for i in key2 %}
       <option value="{{i.Godown}}">{{i.Godown}}</option>
       {% endfor %}
     </select>
     <br><br>
-    <button type="submit" class="btn btn-outline-success">Show Godown</button>
-    <center>
-      <H2 style="border: 2px solid DodgerBlue;">GODOWN {{selected}}</H2>
-    </center>
+
+    <b>Row_No: </b> <select name="row_no" id="row_no" onchange='this.form.submit()'>
+      {% for j in key3 %}
+      <option value="{{j.RowNo}}">{{j.RowNo}}</option>
+      {% endfor %}
+    </select>
+    <br><br>
   </form>
 
+  <center>
+    <H2 style="border: 2px solid DodgerBlue;">GODOWN {{selected}}</H2>
+  </center>
 
   <script>
     $(document).ready(function () {
       $('#selected_Godown').val('{{selected}}')
+      $('#row_no').val('{{row}}')
     });
+    
   </script>
-
-
   <br><br>
-  
+
   <table id="records_table" class="table table-bordered">
     <thead>
       <tr class="table-primary">
@@ -54,6 +61,7 @@
         <th scope="col">Net_Kg</th>
         <th scope="col">Row_No</th>
         <th scope="col">Remarks</th>
+        <th scope="col">Remarks_2</th>
         <th scope="col">Status</th>
         <th scope="col">PCases</th>
         {% if isHigher %}
@@ -81,6 +89,18 @@
         <td>{{i.NetKg}}</td>
         <td>{{i.RowNo}}</td>
         <td>{{i.Remarks}}</td>
+        <td>
+          <form method='POST'>
+            <input type="hidden" id="userid" value="{{current_user}}">
+            {% csrf_token %}
+            <select class="form-select selected_value" aria-label="Default select example" name='Remarks2' id={{i.id}}>
+              <option selected value = "">Select Remark</option>
+              <option value="Mango">Mango</option>
+              <option value="Orange">Orange</option>
+              <option value="Apple">Apple</option>
+            </select>
+          </form>
+        </td>
         <!-- {% if i.status == False %}
                 <td style="background-color:#FF0000">{{i.status}}</td>
                 {% else %} -->
@@ -93,8 +113,8 @@
         {% endif %}
         {% if isHigher %}
         <td>
-          <button class='btn btn-primary update' id={{i.id}} data-toggle='modal'
-            data-target='#updateModal'>Update</button>
+          <input type="hidden" id="Myid" class ="hide" value="{{i.id}}">
+          <button class='btn btn-primary update id_{{i.id}}' id={{i.id}} value = "{{i.id}}" disabled>Update</button>
         </td>
         <td>{{i.updated_by_id}}</td>
         <td>{{i.updated_at}}</td>
@@ -104,43 +124,14 @@
       <tr style="background-color:#a8a5a5">
         <td colspan="9">Total Godown Cases</td>
         <td>{{sum}}</td>
-        <td colspan="5">Total Scanned Bags</td>
+        <td colspan="6">Total Scanned Bags</td>
         <td>{{case}}</td>
       </tr>
     </tbody>
     {% endif %}
   </table>
-  <!-- popup -->
-  <div class="container" style="margin-left:inherit">
+  <a class="btn btn-primary" href="{% url 'logout' %}" role="button">LogOut</a>
 
-    <!--  Update Modal -->
-    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Update</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <input type="hidden" id="userid" value="{{current_user}}">
-              <input type="hidden" id="Myid" value="">
-              <div class="form-group">
-                <label for="Remarks">Remarks</label>
-                <input type="text" class="form-control" id="Remarks" name="Remarks" value="">
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="supdate">Update</button>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <script>
       // CSRF code
@@ -178,36 +169,35 @@
       });
 
       //For getting data to the modal
-      $('#records_table').on('click', '.update', function () {
-        var id = $(this).attr('id');
-        $('input[id=Myid]').val(id);
+      
+      var value = ""
 
-        var myurl = 'http://localhost:8000/data/api/' + id;
-        $("#Remarks").change(function () {
-          $('input[name=Remarks]').val($(this).val());
+      $(".selected_value").change(function () {
+        $('.update').prop('disabled', true);
+        id = this.id
+        value = $(this).val()
+        
+        // Fetching Value
+        
+        $('.id_'+id).prop('disabled', false);
+        
+        if (value == "") {
+          $('.id_'+id).prop('disabled', true);
+        }
+        // Fetching Text
+        console.log($(this).find('option:selected').text());
 
-        });
-
-        $.ajax({
-          async: true,
-          url: myurl,
-          method: 'GET',
-          success: function (result) {
-            $('input[name="Remarks"]').val(result.Remarks);
-          }
-        });
-
-      });
+    });
 
       //For Update the data
-      $('#supdate').click(function () {
-        var id = $("#Myid").attr("value");
+      $('.update').click(function () {
+        var id =  this.id;
         console.log(id);
-        var myurl = 'http://localhost:8000/data/api/' + id + '/update/';
+        var myurl = '/data/api/' + id + '/update/';
         var updated_by_id = $("#userid").attr("value");
         console.log(updated_by_id);
 
-        var remark = $('input[name=Remarks]').val();
+        var remark = value;
 
         $.ajax({
           type: 'PATCH',

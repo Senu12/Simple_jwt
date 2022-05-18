@@ -56,6 +56,30 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
+
+# LOGGING = {
+#     'version': 1,
+#     'filters': {
+#         'require_debug_true': {
+#             '()': 'django.utils.log.RequireDebugTrue',
+#         }
+#     },
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'filters': ['require_debug_true'],
+#             'class': 'logging.StreamHandler',
+#         }
+#     },
+#     'loggers': {
+#         'django.db.backends': {
+#             'level': 'DEBUG',
+#             'handlers': ['console'],
+#         }
+#     }
+# }
+
+
 ROOT_URLCONF = 'Data.urls'
 
 TEMPLATES = [
@@ -133,14 +157,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_RENDERER_CLASSES': [
-#         'rest_framework.renderers.JSONRenderer',
-#     ]
-# }
-
 LOGIN_REDIRECT_URL = '/data/Listofdata'
 # LOGIN_REDIRECT_URL = '/data/higher'
+LOGOUT_REDIRECT_URL = 'http://127.0.0.1:8000/login/'
 
 
 CORS_ALLOWED_ORIGINS = [
